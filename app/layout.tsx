@@ -8,12 +8,13 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 export const metadata: Metadata = {
   title: 'StayFocus',
   description: 'Aplicativo para ajudar pessoas neurodivergentes com organização e produtividade',
+  // Atualizar para usar o novo logo como ícone principal
   icons: {
     icon: [
-      { url: '/favicon.svg', type: 'image/svg+xml' },
-      { url: '/favicon.ico', sizes: 'any' },
-      { url: '/favicon.png', type: 'image/png' }
+      // Usar o novo logo PNG como ícone principal
+      { url: '/images/stayfocus_logo.png', type: 'image/png' }
     ],
+    // Manter o logo SVG para Apple touch icon por enquanto, ou podemos mudar se preferir
     apple: '/images/logo.svg',
   },
 }

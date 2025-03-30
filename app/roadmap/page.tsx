@@ -51,8 +51,11 @@ export default function RoadmapPage() {
           <ul className="list-disc pl-6 space-y-1 mb-3">
             <li>Temporizador Pomodoro - Técnica adaptada para cérebros neurodivergentes</li>
             <li>Registro de Estudos - Acompanhe seu progresso e celebre pequenas vitórias</li>
+            <li>**Conferência de Simulados - Carregue arquivos JSON e revise suas respostas**</li>
+            <li>**Histórico de Simulados - Veja seu desempenho (melhor/última nota) e refaça simulados**</li>
+            <li>**Integração do Histórico com Backups - Salve e restaure seu progresso via Google Drive ou localmente**</li>
           </ul>
-          
+
           <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mt-4 mb-2">❤️ Saúde</h3>
           <ul className="list-disc pl-6 space-y-1 mb-3">
             <li>Registro de Medicamentos - Com sistema de intervalo entre doses para evitar superdosagem acidental</li>
@@ -128,9 +131,30 @@ export default function RoadmapPage() {
           </ul>
         </Card>
 
+        {/* Nova Sprint para Funcionalidades Adicionais */}
+        <Card className="mb-6">
+          <div className="flex items-center">
+            <h2 className="text-xl font-bold text-cyan-600 dark:text-cyan-400 mb-4">⚙️ Sprint 6 (Funcionalidades Adicionais)</h2>
+            <div className="ml-2 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 px-2 py-0.5 rounded-full text-xs flex items-center">
+              <CheckCircle2 className="h-3 w-3 mr-1" />
+              Concluído
+            </div>
+          </div>
+
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mt-2 mb-2">💾 Backup e Restauração</h3>
+          <ul className="list-disc pl-6 space-y-1 mb-3">
+            <li>Backup Local - Exporte todos os seus dados para um arquivo JSON</li>
+            <li>Importação Local - Restaure seus dados a partir de um arquivo JSON</li>
+            <li>Integração com Google Drive - Conecte sua conta para salvar e carregar backups na nuvem</li>
+            <li>Inclusão do Histórico de Simulados - Garante que seu progresso nos simulados seja salvo nos backups</li>
+          </ul>
+        </Card>
+        {/* Fim da Nova Sprint */}
+
+
         <Card>
           <div className="flex items-center">
-            <h2 className="text-xl font-bold text-rose-600 dark:text-rose-400 mb-4">🔮 Sprint 5 (Final)</h2>
+            <h2 className="text-xl font-bold text-rose-600 dark:text-rose-400 mb-4">🔮 Sprint 7 (Final)</h2> {/* Renomeado para Sprint 7 */}
             <div className="ml-2 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 px-2 py-0.5 rounded-full text-xs flex items-center">
               Planejado
             </div>

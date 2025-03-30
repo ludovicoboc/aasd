@@ -126,6 +126,130 @@ export default function AjudaImportacaoExportacao() {
           </div>
         </div>
       </div>
+
+      {/* Nova Seção: Criando Simulados com IA */}
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mt-8">
+        <div className="flex items-center mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-brain-circuit text-purple-600 dark:text-purple-400 mr-2"><path d="M12 5a3 3 0 1 0-5.997.004A3 3 0 0 0 12 5Z"/><path d="M12 19a3 3 0 1 0-5.997-.004A3 3 0 0 0 12 19Z"/><path d="M17 12a3 3 0 1 0-.004 5.997A3 3 0 0 0 17 12Z"/><path d="M17 12a3 3 0 1 0-.004-5.997A3 3 0 0 0 17 12Z"/><path d="M12 9a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1"/><path d="m14.5 12.5 1-1"/><path d="m15.5 10.5-1 1"/><path d="m14.5 11.5 1 1"/><path d="m15.5 13.5-1-1"/><path d="M9.5 12.5 11 14"/><path d="m6.5 11.5 1 1"/><path d="M8 9.5V7a1 1 0 0 1 1-1h"/><path d="M7.5 12.5 9 11"/></svg>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            Criando Simulados com Inteligência Artificial (IA)
+          </h1>
+        </div>
+
+        <div className="prose dark:prose-invert max-w-none">
+          <p>
+            Você pode usar Modelos de Linguagem Grandes (LLMs), como Claude, ChatGPT, Gemini, entre outros,
+            para gerar arquivos de simulado personalizados sobre os conteúdos que você precisa estudar.
+            Siga os passos abaixo para garantir que o arquivo gerado seja compatível com o StayFocus.
+          </p>
+
+          <h3 className="mt-5 mb-2">1. Copie a Estrutura JSON Necessária</h3>
+          <p>
+            A IA precisa saber exatamente qual formato de arquivo criar. Copie a estrutura abaixo e forneça-a
+            como exemplo no seu prompt (pedido) para a IA:
+          </p>
+          <pre className="bg-gray-100 dark:bg-gray-700 p-3 rounded-md text-sm overflow-x-auto">
+            <code>
+{`{
+  "metadata": {
+    "titulo": "Título do Seu Simulado Aqui",
+    "concurso": "Opcional: Nome do Concurso",
+    "ano": 2025,
+    "area": "Opcional: Área de Conhecimento",
+    "nivel": "Opcional: Nível (Fácil, Médio, Difícil)",
+    "totalQuestoes": 10, // Ajuste o número total de questões
+    "autor": "Opcional: Seu Nome ou Fonte"
+  },
+  "questoes": [
+    {
+      "id": 1, // ID numérico único para cada questão
+      "enunciado": "Texto completo da pergunta aqui...",
+      "alternativas": {
+        "a": "Texto da alternativa A",
+        "b": "Texto da alternativa B",
+        "c": "Texto da alternativa C",
+        "d": "Texto da alternativa D",
+        "e": "Opcional: Texto da alternativa E"
+        // Adicione mais alternativas se necessário (f, g, ...)
+      },
+      "gabarito": "c", // Letra da alternativa correta
+      "assunto": "Opcional: Tópico específico da questão",
+      "dificuldade": 2, // Opcional: Nível de dificuldade (ex: 1 a 5)
+      "explicacao": "Opcional: Justificativa detalhada da resposta correta"
+    }
+    // Repita a estrutura acima para cada questão, ajustando o "id"
+  ]
+}`}
+            </code>
+          </pre>
+          <p className="text-sm mt-2">
+            <strong>Importante:</strong> Os campos <code>titulo</code>, <code>totalQuestoes</code>, <code>id</code>, <code>enunciado</code>, <code>alternativas</code> e <code>gabarito</code> são <strong>obrigatórios</strong>. Os outros são opcionais.
+            Certifique-se de que cada <code>id</code> de questão seja um número único.
+          </p>
+
+          <h3 className="mt-5 mb-2">2. Prepare o Conteúdo (Opcional, mas Recomendado)</h3>
+          <p>
+            Se você tem um texto, PDF ou anotações sobre o conteúdo que deseja transformar em simulado,
+            é útil copiá-lo para um arquivo <code>.txt</code> simples. Você poderá anexar este arquivo
+            ao seu pedido para a IA, facilitando a criação de questões relevantes.
+          </p>
+
+          <h3 className="mt-5 mb-2">3. Crie o Prompt para a IA</h3>
+          <p>
+            Vá até a interface de chat da sua IA preferida (Claude, ChatGPT, Gemini, etc.) e crie um prompt claro.
+            Anexe o arquivo <code>.txt</code> com o conteúdo, se você o criou.
+          </p>
+          <p><strong>Exemplo de Prompt:</strong></p>
+          <blockquote className="border-l-4 border-purple-500 pl-4 italic my-4">
+            "Por favor, crie um simulado com [Número] questões de múltipla escolha sobre o conteúdo do arquivo anexado (ou sobre [Tópico Específico]).
+            As questões devem abordar [Aspectos específicos do tópico, se houver].
+            Gere a resposta estritamente no formato JSON que forneci abaixo. Certifique-se de que cada questão tenha um ID numérico único,
+            e que o campo 'totalQuestoes' no metadata corresponda ao número de questões geradas. Inclua 4 alternativas (a, b, c, d) para cada questão.
+            Se possível, adicione também os campos opcionais 'assunto' e 'explicacao' para cada questão.
+
+            Aqui está o formato JSON exato a ser seguido:
+            [Cole aqui a estrutura JSON copiada no Passo 1]"
+          </blockquote>
+          <p className="text-sm mt-2">
+            Ajuste o `[Número]` de questões e o `[Tópico Específico]` conforme sua necessidade.
+          </p>
+
+          <h3 className="mt-5 mb-2">4. Use o JSON Gerado no StayFocus</h3>
+          <p>
+            A IA deve retornar uma resposta contendo o código JSON. Copie todo esse código JSON.
+            Você tem duas opções para carregá-lo no StayFocus:
+          </p>
+          <ul className="list-disc list-inside space-y-2 pl-4 mb-3">
+            <li>
+              <strong>Opção 1 (Recomendado): Colar o Texto</strong><br/>
+              Vá para a seção "Estudos" no StayFocus, clique em "Conferir Simulado". Na tela de carregamento,
+              cole o código JSON diretamente na caixa de texto "Opção 2: Colar o texto JSON aqui" e clique no botão
+              "Carregar Texto Colado".
+            </li>
+            <li>
+              <strong>Opção 2: Salvar como Arquivo</strong><br/>
+              Abra um editor de texto simples (como Bloco de Notas no Windows ou TextEdit no Mac), cole o código JSON
+              e salve o arquivo com a extensão <code>.json</code> (ex: <code>meu_simulado.json</code>). Depois, na tela
+              "Conferir Simulado" do StayFocus, use a "Opção 1: Carregar arquivo .json" para selecionar este arquivo.
+            </li>
+          </ul>
+
+          <div className="flex items-start gap-3 bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded-md border border-yellow-100 dark:border-yellow-800 my-4">
+            <AlertTriangle className="text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-1" size={20} />
+            <div>
+              <p className="font-medium text-yellow-800 dark:text-yellow-200">Revisão é Essencial:</p>
+              <p className="text-sm text-yellow-700 dark:text-yellow-300">
+                As IAs podem cometer erros! Sempre revise as questões, alternativas e, principalmente,
+                o gabarito gerado pela IA antes de usar o simulado para estudar. Verifique se o JSON está
+                corretamente formatado, sem vírgulas extras ou faltando chaves.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      {/* Fim da Nova Seção */}
+
     </div>
   );
-} 
+}
