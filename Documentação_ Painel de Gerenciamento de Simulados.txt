@@ -1,0 +1,158 @@
+<img src="https://r2cdn.perplexity.ai/pplx-full-logo-primary-dark%402x.png" class="logo" width="120"/>
+
+# 
+
+---
+
+# Documentação: Painel de Gerenciamento de Simulados para Concursos
+
+## Visão Geral do Projeto
+
+Este projeto visa criar uma aplicação web completa para gerenciamento de simulados de concursos públicos, com foco especial em acessibilidade para pessoas com TDAH. A plataforma permitirá a importação, gerenciamento e realização de simulados em formato JSON, além de oferecer funcionalidades avançadas de estudo adaptativo.
+
+## Objetivos Principais
+
+1. Criar um sistema de importação e gerenciamento de simulados em formato JSON
+2. Implementar interface adaptada para necessidades de pessoas com TDAH
+3. Desenvolver funcionalidades avançadas de estudo e análise de desempenho
+4. Permitir exportação de resultados e estatísticas personalizadas
+
+## Especificações Técnicas
+
+### Estrutura de Dados dos Simulados (JSON)
+
+```json
+{
+  "metadata": {
+    "titulo": "Simulado BANESE 2025 - Conhecimentos Bancários",
+    "concurso": "BANESE",
+    "ano": 2025,
+    "area": "Conhecimentos Bancários",
+    "nivel": "Médio",
+    "totalQuestoes": 40,
+    "tempoPrevisto": 180,
+    "autor": "Nome do Criador",
+    "dataGeracao": "2025-03-20"
+  },
+  "questoes": [
+    {
+      "id": 1,
+      "enunciado": "Texto completo da questão...",
+      "alternativas": {
+        "a": "Texto da alternativa A",
+        "b": "Texto da alternativa B",
+        "c": "Texto da alternativa C",
+        "d": "Texto da alternativa D",
+        "e": "Texto da alternativa E"
+      },
+      "gabarito": "c",
+      "assunto": "Mercado Financeiro",
+      "dificuldade": 2,
+      "dicas": [
+        "Primeira dica mais genérica",
+        "Segunda dica mais específica",
+        "Terceira dica quase revelando a resposta"
+      ],
+      "explicacao": "Explicação detalhada da resposta correta..."
+    }
+    // Mais questões...
+  ]
+}
+```
+
+
+### Funcionalidades Principais
+
+#### Gerenciamento de Simulados
+
+- Upload de arquivos JSON com validação de formato
+- Listagem de simulados disponíveis com filtros e busca
+- Edição de metadados dos simulados
+- Exclusão de simulados
+
+
+#### Interface de Realização de Simulados
+
+- Modo de simulado completo com temporizador
+- Modo de estudo por tópicos específicos
+- Marcação de questões para revisão
+- Sistema de dicas progressivas
+- Feedback visual adaptado para TDAH
+
+
+#### Análise de Desempenho
+
+- Estatísticas gerais e por assunto
+- Gráficos de evolução temporal
+- Identificação de padrões de erro
+- Recomendação de tópicos para revisão
+
+
+#### Acessibilidade
+
+- Design adaptado para TDAH (baixo contraste, tipografia adequada)
+- Opções de personalização de interface
+- Suporte a atalhos de teclado
+- Compatibilidade com leitores de tela
+
+
+## Requisitos Técnicos
+
+### Frontend
+
+- Framework: React.js com TypeScript
+- Gerenciamento de Estado: Redux ou Context API
+- Estilização: Styled-components ou Tailwind CSS
+- Componentes: Material-UI ou Chakra UI
+
+
+### Backend
+
+- Node.js com Express
+- MongoDB para armazenamento
+- Autenticação JWT
+- API RESTful
+
+
+### Funcionalidades Avançadas (conforme prompt 5.4)
+
+1. Sistema de temporizador visível para cada questão
+2. Marcação de questões para revisão posterior
+3. Filtros para mostrar apenas questões erradas ou marcadas
+4. Funcionalidade de dicas progressivas
+5. Módulo de análise de padrões de erro
+6. Sistema de recomendação de tópicos para revisão baseado no desempenho
+
+## Fluxo de Usuário
+
+1. Usuário acessa a plataforma e faz login/cadastro
+2. Na dashboard, visualiza simulados disponíveis ou importa novos
+3. Seleciona um simulado para realizar
+4. Configura preferências (tempo, modo de estudo)
+5. Realiza o simulado com acesso às funcionalidades adaptativas
+6. Recebe feedback imediato e estatísticas de desempenho
+7. Pode exportar resultados ou continuar estudando áreas problemáticas
+
+## Considerações para Desenvolvimento
+
+- Priorizar a experiência do usuário com TDAH em todas as decisões de design
+- Implementar feedback visual claro e não-distrativo
+- Garantir persistência de dados para evitar perda de progresso
+- Desenvolver com abordagem mobile-first para garantir responsividade
+- Incluir testes automatizados para garantir funcionamento correto
+
+
+## Próximos Passos
+
+1. Desenvolver estrutura básica do frontend e backend
+2. Implementar sistema de importação de simulados
+3. Criar interface de gerenciamento
+4. Desenvolver módulo de realização de simulados
+5. Implementar funcionalidades avançadas de estudo adaptativo
+6. Adicionar sistema de estatísticas e exportação
+7. Realizar testes de usabilidade com foco em usuários com TDAH
+
+<div style="text-align: center">⁂</div>
+
+[^1]: https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/48028297/7e3baff7-a606-4609-89bf-611f66b0e24b/ft.txt
+

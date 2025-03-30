@@ -1,0 +1,129 @@
+{
+  "documentacao": {
+    "titulo": "Painel de Gerenciamento de Simulados para Concursos",
+    "visaoGeral": {
+      "descricao": "Aplicação web completa para gerenciamento de simulados de concursos públicos com foco em acessibilidade para pessoas com TDAH",
+      "funcionalidadesPrincipais": [
+        "Importação, gerenciamento e realização de simulados em formato JSON",
+        "Funcionalidades avançadas de estudo adaptativo"
+      ]
+    },
+    "objetivos": [
+      "Criar sistema de importação/gerenciamento de simulados JSON",
+      "Implementar interface adaptada para TDAH",
+      "Desenvolver análise de desempenho avançada",
+      "Permitir exportação de resultados estatísticos"
+    ],
+    "especificacoesTecnicas": {
+      "estruturaDados": {
+        "metadata": {
+          "titulo": "Simulado BANESE 2025 - Conhecimentos Bancários",
+          "concurso": "BANESE",
+          "ano": 2025,
+          "area": "Conhecimentos Bancários",
+          "nivel": "Médio",
+          "totalQuestoes": 40,
+          "tempoPrevisto": 180,
+          "autor": "Nome do Criador",
+          "dataGeracao": "2025-03-20"
+        },
+        "questoes": [
+          {
+            "id": 1,
+            "enunciado": "Texto completo da questão...",
+            "alternativas": {
+              "a": "Texto da alternativa A",
+              "b": "Texto da alternativa B",
+              "c": "Texto da alternativa C",
+              "d": "Texto da alternativa D",
+              "e": "Texto da alternativa E"
+            },
+            "gabarito": "c",
+            "assunto": "Mercado Financeiro",
+            "dificuldade": 2,
+            "dicas": [
+              "Primeira dica mais genérica",
+              "Segunda dica mais específica",
+              "Terceira dica quase revelando a resposta"
+            ],
+            "explicacao": "Explicação detalhada da resposta correta..."
+          }
+        ]
+      },
+      "funcionalidades": {
+        "gerenciamentoSimulados": [
+          "Upload de arquivos JSON com validação",
+          "Listagem com filtros e busca",
+          "Edição de metadados",
+          "Exclusão de simulados"
+        ],
+        "interfaceSimulados": [
+          "Modo completo com temporizador",
+          "Estudo por tópicos",
+          "Marcação de questões",
+          "Sistema de dicas progressivas",
+          "Feedback visual adaptado"
+        ],
+        "analiseDesempenho": [
+          "Estatísticas gerais e por assunto",
+          "Gráficos de evolução",
+          "Identificação de padrões de erro",
+          "Recomendações de revisão"
+        ],
+        "acessibilidade": [
+          "Design para TDAH",
+          "Personalização de interface",
+          "Atalhos de teclado",
+          "Compatibilidade com leitores de tela"
+        ]
+      }
+    },
+    "requisitosTecnicos": {
+      "frontend": [
+        "React.js com TypeScript",
+        "Redux/Context API",
+        "Styled-components/Tailwind",
+        "Material-UI/Chakra UI"
+      ],
+      "backend": [
+        "Node.js com Express",
+        "MongoDB",
+        "JWT",
+        "API RESTful"
+      ],
+      "funcionalidadesAvancadas": [
+        "Temporizador por questão",
+        "Marcação para revisão",
+        "Filtros de questões",
+        "Dicas progressivas",
+        "Análise de padrões de erro",
+        "Sistema de recomendações"
+      ]
+    },
+    "fluxoUsuario": [
+      "Login/Cadastro",
+      "Dashboard de simulados",
+      "Seleção/Importação",
+      "Configuração de preferências",
+      "Realização do simulado",
+      "Feedback e estatísticas",
+      "Exportação de resultados"
+    ],
+    "consideracoesDesenvolvimento": [
+      "Priorizar experiência TDAH",
+      "Feedback visual não-distrativo",
+      "Persistência de dados",
+      "Abordagem mobile-first",
+      "Testes automatizados"
+    ],
+    "proximosPassos": [
+      "Estrutura básica frontend/backend",
+      "Sistema de importação",
+      "Interface de gerenciamento",
+      "Módulo de realização",
+      "Estudo adaptativo",
+      "Sistema de estatísticas",
+      "Testes de usabilidade"
+    ]
+  }
+}

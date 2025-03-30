@@ -1,0 +1,46 @@
+{
+  "metadata": {
+    "titulo": "Simulado Aleatório Beta",
+    "concurso": "Teste",
+    "ano": 2025,
+    "area": "Variedades",
+    "nivel": "Médio",
+    "totalQuestoes": 3,
+    "autor": "Cline Bot"
+  },
+  "questoes": [
+    {
+      "id": 201,
+      "enunciado": "Qual destes animais é um mamífero?",
+      "alternativas": {
+        "a": "Tubarão",
+        "b": "Pinguim",
+        "c": "Baleia",
+        "d": "Crocodilo"
+      },
+      "gabarito": "c"
+    },
+    {
+      "id": 202,
+      "enunciado": "Em que ano o homem pisou na Lua pela primeira vez?",
+      "alternativas": {
+        "a": "1965",
+        "b": "1969",
+        "c": "1971",
+        "d": "1980"
+      },
+      "gabarito": "b"
+    },
+    {
+      "id": 203,
+      "enunciado": "Qual a fórmula química da água?",
+      "alternativas": {
+        "a": "CO2",
+        "b": "O2",
+        "c": "NaCl",
+        "d": "H2O"
+      },
+      "gabarito": "d"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "metadata": {
+    "titulo": "Simulado Aleatório Gama",
+    "concurso": "Teste",
+    "ano": 2025,
+    "area": "Conhecimentos Gerais",
+    "nivel": "Variado",
+    "totalQuestoes": 4,
+    "autor": "Cline Bot"
+  },
+  "questoes": [
+    {
+      "id": 301,
+      "enunciado": "Qual o nome do processo pelo qual as plantas produzem seu próprio alimento?",
+      "alternativas": {
+        "a": "Respiração",
+        "b": "Fotossíntese",
+        "c": "Transpiração",
+        "d": "Digestão"
+      },
+      "gabarito": "b"
+    },
+    {
+      "id": 302,
+      "enunciado": "Quantos lados tem um hexágono?",
+      "alternativas": {
+        "a": "5",
+        "b": "6",
+        "c": "7",
+        "d": "8"
+      },
+      "gabarito": "b"
+    },
+    {
+      "id": 303,
+      "enunciado": "Quem escreveu 'Dom Quixote'?",
+      "alternativas": {
+        "a": "William Shakespeare",
+        "b": "Machado de Assis",
+        "c": "Miguel de Cervantes",
+        "d": "Victor Hugo"
+      },
+      "gabarito": "c"
+    },
+    {
+      "id": 304,
+      "enunciado": "Qual a montanha mais alta do mundo?",
+      "alternativas": {
+        "a": "K2",
+        "b": "Monte Everest",
+        "c": "Kangchenjunga",
+        "d": "Makalu"
+      },
+      "gabarito": "b"
+    }
+  ]
+}

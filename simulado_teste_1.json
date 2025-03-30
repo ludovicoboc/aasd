@@ -1,0 +1,68 @@
+{
+  "metadata": {
+    "titulo": "Simulado Aleatório Alpha",
+    "concurso": "Teste",
+    "ano": 2025,
+    "area": "Geral",
+    "nivel": "Fácil",
+    "totalQuestoes": 5,
+    "autor": "Cline Bot"
+  },
+  "questoes": [
+    {
+      "id": 101,
+      "enunciado": "Qual a cor do cavalo branco de Napoleão?",
+      "alternativas": {
+        "a": "Preto",
+        "b": "Marrom",
+        "c": "Branco",
+        "d": "Malhado"
+      },
+      "gabarito": "c"
+    },
+    {
+      "id": 102,
+      "enunciado": "Quanto é 2 + 2?",
+      "alternativas": {
+        "a": "3",
+        "b": "4",
+        "c": "5",
+        "d": "22"
+      },
+      "gabarito": "b"
+    },
+    {
+      "id": 103,
+      "enunciado": "Qual o planeta mais próximo do Sol?",
+      "alternativas": {
+        "a": "Vênus",
+        "b": "Terra",
+        "c": "Marte",
+        "d": "Mercúrio"
+      },
+      "gabarito": "d"
+    },
+    {
+      "id": 104,
+      "enunciado": "Qual a capital da França?",
+      "alternativas": {
+        "a": "Londres",
+        "b": "Berlim",
+        "c": "Paris",
+        "d": "Roma"
+      },
+      "gabarito": "c"
+    },
+    {
+      "id": 105,
+      "enunciado": "Qual o maior oceano do mundo?",
+      "alternativas": {
+        "a": "Atlântico",
+        "b": "Índico",
+        "c": "Ártico",
+        "d": "Pacífico"
+      },
+      "gabarito": "d"
+    }
+  ]
+}

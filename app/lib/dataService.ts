@@ -15,6 +15,7 @@ import { usePrioridadesStore } from '../stores/prioridadesStore';
 import { useRegistroEstudosStore } from '../stores/registroEstudosStore';
 import { useSonoStore } from '../stores/sonoStore';
 import { useAtividadesStore } from '../stores/atividadesStore';
+import { useHistoricoSimuladosStore } from '../stores/historicoSimuladosStore'; // <-- Importar novo store
 import { useAppStore } from '../store'; // Store global que contém dados de saúde e lazer
 
 /**
@@ -34,12 +35,13 @@ const coletarDadosParaExportar = (): object | null => {
     const registroEstudos = useRegistroEstudosStore.getState();
     const sono = useSonoStore.getState();
     const atividades = useAtividadesStore.getState();
+    const historicoSimulados = useHistoricoSimuladosStore.getState(); // <-- Coletar estado do histórico
     const appGlobal = useAppStore.getState();
 
     return {
-      versao: '1.0',
+      versao: '1.1', // <-- Incrementar versão para indicar mudança na estrutura de dados
       timestamp: new Date().toISOString(),
-      dados: {
+      dados: { // <-- Bloco de dados correto começa aqui
         financas: limparFuncoesDoObjeto(financas),
         alimentacao: limparFuncoesDoObjeto(alimentacao),
         autoconhecimento: limparFuncoesDoObjeto(autoconhecimento),
@@ -51,8 +53,9 @@ const coletarDadosParaExportar = (): object | null => {
         registroEstudos: limparFuncoesDoObjeto(registroEstudos),
         sono: limparFuncoesDoObjeto(sono),
         atividades: limparFuncoesDoObjeto(atividades),
+        historicoSimulados: limparFuncoesDoObjeto(historicoSimulados), // <-- Incluir histórico nos dados (linha única)
         appGlobal: limparFuncoesDoObjeto(appGlobal),
-      }
+      } // <-- Fechamento correto do bloco 'dados'
     };
   } catch (error) {
     console.error('Erro ao coletar dados para exportação:', error);
@@ -140,12 +143,14 @@ const validarDadosImportados = (dados: any): { valido: boolean; erro?: string; t
   }
   if (!dados.versao || !dados.timestamp || !dados.dados) {
     return { valido: false, erro: 'Formato de arquivo inválido: Faltam propriedades essenciais (versao, timestamp, dados).' };
+  } // <-- Fechar o primeiro IF aqui
+
+  // Validar a versão
+  if (dados.versao !== '1.0' && dados.versao !== '1.1') {
+    return { valido: false, erro: `Versão incompatível: ${dados.versao}. Esperada: 1.0 ou 1.1` };
   }
 
-  if (dados.versao !== '1.0') {
-    return { valido: false, erro: `Versão incompatível: ${dados.versao}. Esperada: 1.0` };
-  }
-
+  // Validar a seção 'dados'
   if (typeof dados.dados !== 'object' || Object.keys(dados.dados).length === 0) {
     return { valido: false, erro: 'Seção "dados" está vazia ou inválida.' };
   }
@@ -183,6 +188,10 @@ const _applyImportedData = (dadosImportados: any) => {
   applyState(useRegistroEstudosStore.setState, dadosImportados.registroEstudos);
   applyState(useSonoStore.setState, dadosImportados.sono);
   applyState(useAtividadesStore.setState, dadosImportados.atividades);
+  // Aplicar histórico apenas se existir nos dados importados (compatibilidade com v1.0)
+  if (dadosImportados.historicoSimulados) {
+    applyState(useHistoricoSimuladosStore.setState, dadosImportados.historicoSimulados); // <-- Restaurar histórico
+  }
   applyState(useAppStore.setState, dadosImportados.appGlobal);
 };
 
