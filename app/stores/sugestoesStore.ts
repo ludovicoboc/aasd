@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { persist, createJSONStorage } from 'zustand/middleware'
 
 interface SugestoesState {
   sugestoesFavoritas: string[]
@@ -27,8 +27,8 @@ export const useSugestoesStore = create<SugestoesState>()(
       })),
     }),
     {
-      name: 'sugestoes-favoritas',
-      getStorage: () => localStorage
+      name: 'sugestoes-storage',
+      storage: createJSONStorage(() => localStorage)
     }
   )
 )

@@ -15,7 +15,8 @@ const iconesMapeados: Record<string, React.ReactNode> = {
   'music': <Music className="h-5 w-5" />,
 }
 
-export function RastreadorGastos() {
+// Change to default export
+export default function RastreadorGastos() { 
   const { categorias, transacoes } = useFinancasStore()
   const [dadosGrafico, setDadosGrafico] = useState<Array<{ name: string; value: number; cor: string }>>([])
   const [totalGastos, setTotalGastos] = useState(0)

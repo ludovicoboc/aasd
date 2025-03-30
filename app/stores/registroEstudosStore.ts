@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { persist, createJSONStorage } from 'zustand/middleware'
 
 export type SessaoEstudo = {
   id: string
@@ -86,7 +86,7 @@ export const useRegistroEstudosStore = create<RegistroEstudosState>()(
     }),
     {
       name: 'registro-estudos-storage',
-      getStorage: () => localStorage
+      storage: createJSONStorage(() => localStorage)
     }
   )
 )

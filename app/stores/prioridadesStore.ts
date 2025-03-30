@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { persist, createJSONStorage } from 'zustand/middleware'
 
 export type Prioridade = {
   id: string
@@ -68,7 +68,7 @@ export const usePrioridadesStore = create<PrioridadesState>()(
     }),
     {
       name: 'prioridades-diarias',
-      getStorage: () => localStorage
+      storage: createJSONStorage(() => localStorage),
     }
   )
 )

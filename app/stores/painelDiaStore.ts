@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { persist, createJSONStorage } from 'zustand/middleware'
 
 export type BlocoTempo = {
   id: string
@@ -63,7 +63,7 @@ export const usePainelDiaStore = create<PainelDiaState>()(
     }),
     {
       name: 'painel-dia-storage',
-      getStorage: () => localStorage
+      storage: createJSONStorage(() => localStorage)
     }
   )
 )

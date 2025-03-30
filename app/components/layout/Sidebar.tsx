@@ -70,7 +70,9 @@ type SidebarProps = {
 }
 
 export function Sidebar({ onClose }: SidebarProps) {
-  const pathname = usePathname()
+  // Get pathname, default to empty string if null
+  const currentPathname = usePathname();
+  const pathname = currentPathname ?? ''; 
 
   return (
     <div className="fixed inset-0 z-50 flex">
@@ -97,7 +99,8 @@ export function Sidebar({ onClose }: SidebarProps) {
         <nav className="flex-1 p-4 overflow-y-auto">
           <div className="space-y-2">
             {navItems.map((item) => {
-              const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`)
+              // Now pathname is guaranteed to be a string
+              const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
               
               return (
                 <Link

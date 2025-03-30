@@ -18,12 +18,11 @@ import { useAtividadesStore } from '../stores/atividadesStore';
 import { useAppStore } from '../store'; // Store global que contém dados de saúde e lazer
 
 /**
- * Exporta todos os dados do aplicativo para um arquivo JSON
- * @returns Objeto com informação de sucesso e mensagem
+ * Coleta todos os dados das stores para exportação.
+ * @returns O objeto de dados pronto para ser serializado ou null em caso de erro.
  */
-export const exportarDados = (): { sucesso: boolean; mensagem?: string; erro?: string } => {
+const coletarDadosParaExportar = (): object | null => {
   try {
-    // Coletar todos os dados dos stores
     const financas = useFinancasStore.getState();
     const alimentacao = useAlimentacaoStore.getState();
     const autoconhecimento = useAutoconhecimentoStore.getState();
@@ -35,10 +34,9 @@ export const exportarDados = (): { sucesso: boolean; mensagem?: string; erro?: s
     const registroEstudos = useRegistroEstudosStore.getState();
     const sono = useSonoStore.getState();
     const atividades = useAtividadesStore.getState();
-    const appGlobal = useAppStore.getState(); // Obter dados da store global
-    
-    // Formato unificado com metadados
-    const dadosExportados = {
+    const appGlobal = useAppStore.getState();
+
+    return {
       versao: '1.0',
       timestamp: new Date().toISOString(),
       dados: {
@@ -53,46 +51,68 @@ export const exportarDados = (): { sucesso: boolean; mensagem?: string; erro?: s
         registroEstudos: limparFuncoesDoObjeto(registroEstudos),
         sono: limparFuncoesDoObjeto(sono),
         atividades: limparFuncoesDoObjeto(atividades),
-        appGlobal: limparFuncoesDoObjeto(appGlobal), // Adicionar dados globais que incluem saúde e lazer
+        appGlobal: limparFuncoesDoObjeto(appGlobal),
       }
     };
-    
-    // Converter para JSON e criar arquivo para download
-    const jsonString = JSON.stringify(dadosExportados, null, 2);
-    const blob = new Blob([jsonString], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    
-    // Criar link de download com nome de arquivo padronizado
-    const dataFormatada = new Date().toISOString().split('T')[0];
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `stayfocus_backup_${dataFormatada}.json`;
-    link.click();
-    
-    URL.revokeObjectURL(url);
-    
-    return {
-      sucesso: true,
-      mensagem: 'Dados exportados com sucesso'
-    };
-  } catch (error: unknown) {
-    console.error('Erro ao exportar dados:', error);
-    
-    let mensagemErro = 'Erro desconhecido';
-    if (error instanceof Error) {
-      mensagemErro = error.message;
-    }
-    
-    return {
-      sucesso: false,
-      erro: `Erro ao exportar dados: ${mensagemErro}`
-    };
+  } catch (error) {
+    console.error('Erro ao coletar dados para exportação:', error);
+    return null;
   }
 };
 
 /**
- * Limpa as funções de um objeto para exportação JSON
- * @param obj Objeto a ser limpo
+ * Exporta os dados e dispara o download do arquivo JSON.
+ * Usado para exportação local.
+ * @returns Objeto com informação de sucesso ou erro.
+ */
+export const exportarDadosParaArquivo = (): { sucesso: boolean; mensagem?: string; erro?: string } => {
+  const dadosExportados = coletarDadosParaExportar();
+  if (!dadosExportados) {
+    return { sucesso: false, erro: 'Falha ao coletar dados para exportação.' };
+  }
+
+  try {
+    triggerJsonDownload(dadosExportados, 'stayfocus_backup');
+    return { sucesso: true, mensagem: 'Download do backup iniciado.' };
+  } catch (error: any) {
+    console.error('Erro ao disparar download do JSON:', error);
+    return { sucesso: false, erro: `Erro ao criar arquivo de backup: ${error.message}` };
+  }
+};
+
+/**
+ * Retorna o objeto de dados para ser enviado para APIs (ex: Google Drive).
+ * @returns O objeto de dados ou null em caso de erro.
+ */
+export const obterDadosParaExportar = (): object | null => {
+  return coletarDadosParaExportar();
+};
+
+
+/**
+ * Helper para disparar o download de um objeto como arquivo JSON.
+ * @param dataObject O objeto a ser baixado.
+ * @param baseFilename O nome base para o arquivo (timestamp será adicionado).
+ */
+export const triggerJsonDownload = (dataObject: any, baseFilename: string) => {
+  const jsonString = JSON.stringify(dataObject, null, 2);
+  const blob = new Blob([jsonString], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const timestamp = dataObject.timestamp || new Date().toISOString();
+  const dataFormatada = timestamp.split('T')[0];
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `${baseFilename}_${dataFormatada}.json`;
+  document.body.appendChild(link); // Necessário para Firefox
+  link.click();
+  document.body.removeChild(link); // Limpar
+  URL.revokeObjectURL(url);
+};
+
+
+/**
+ * Limpa as funções de um objeto para exportação JSON.
+ * @param obj Objeto a ser limpo.
  * @returns Objeto sem funções
  */
 const limparFuncoesDoObjeto = (obj: Record<string, any>): Record<string, any> => {
@@ -110,162 +130,122 @@ const limparFuncoesDoObjeto = (obj: Record<string, any>): Record<string, any> =>
 };
 
 /**
- * Valida a estrutura de dados importados
- * @param dados Dados a serem validados
- * @returns Objeto com informação de validade e possível erro
+ * Valida a estrutura básica de dados importados.
+ * @param dados Dados a serem validados.
+ * @returns Objeto com informação de validade e possível erro.
  */
-export const validarDadosImportados = (dados: any): { valido: boolean; erro?: string } => {
-  // Verificar estrutura básica
-  if (!dados?.versao || !dados?.timestamp || !dados?.dados) {
-    return { valido: false, erro: 'Formato de arquivo inválido' };
+const validarDadosImportados = (dados: any): { valido: boolean; erro?: string; timestamp?: string } => {
+  if (!dados || typeof dados !== 'object') {
+    return { valido: false, erro: 'Dados inválidos ou não são um objeto.' };
   }
-  
-  // Verificar versão compatível
+  if (!dados.versao || !dados.timestamp || !dados.dados) {
+    return { valido: false, erro: 'Formato de arquivo inválido: Faltam propriedades essenciais (versao, timestamp, dados).' };
+  }
+
   if (dados.versao !== '1.0') {
-    return { 
-      valido: false, 
-      erro: `Versão incompatível: ${dados.versao}. Esperada: 1.0` 
-    };
+    return { valido: false, erro: `Versão incompatível: ${dados.versao}. Esperada: 1.0` };
   }
-  
-  // Verificar presença de pelo menos um módulo de dados
-  if (Object.keys(dados.dados).length === 0) {
-    return { valido: false, erro: 'Arquivo de backup vazio' };
+
+  if (typeof dados.dados !== 'object' || Object.keys(dados.dados).length === 0) {
+    return { valido: false, erro: 'Seção "dados" está vazia ou inválida.' };
   }
-  
-  return { valido: true };
+
+  return { valido: true, timestamp: dados.timestamp };
 };
 
 /**
- * Importa dados de um arquivo JSON para o aplicativo
- * @param arquivo Arquivo a ser importado
- * @returns Objeto com informação de sucesso e mensagem
+ * Aplica os dados importados (já validados) às stores Zustand.
+ * @param dadosImportados Objeto contendo os dados dos módulos.
  */
-export const importarDados = async (arquivo: File): Promise<{ sucesso: boolean; mensagem?: string; timestamp?: string; erro?: string }> => {
+const _applyImportedData = (dadosImportados: any) => {
+  // Helper para aplicar estado a uma store
+  const applyState = (storeSetter: (partialState: any) => void, data: any) => {
+    if (data && typeof data === 'object') {
+      // Limpar funções novamente por segurança, caso existam no JSON por algum motivo
+      const cleanedData = limparFuncoesDoObjeto(data);
+      // Add explicit 'any' type for state parameter
+      storeSetter((state: any) => ({ 
+        ...state,
+        ...cleanedData
+      }));
+    }
+  };
+
+  // Aplicar dados a cada store se existirem no objeto importado
+  applyState(useFinancasStore.setState, dadosImportados.financas);
+  applyState(useAlimentacaoStore.setState, dadosImportados.alimentacao);
+  applyState(useAutoconhecimentoStore.setState, dadosImportados.autoconhecimento);
+  applyState(useHiperfocosStore.setState, dadosImportados.hiperfocos);
+  applyState(usePainelDiaStore.setState, dadosImportados.painelDia);
+  applyState(usePerfilStore.setState, dadosImportados.perfil);
+  applyState(usePomodoroStore.setState, dadosImportados.pomodoro);
+  applyState(usePrioridadesStore.setState, dadosImportados.prioridades);
+  applyState(useRegistroEstudosStore.setState, dadosImportados.registroEstudos);
+  applyState(useSonoStore.setState, dadosImportados.sono);
+  applyState(useAtividadesStore.setState, dadosImportados.atividades);
+  applyState(useAppStore.setState, dadosImportados.appGlobal);
+};
+
+
+/**
+ * Importa dados de um arquivo JSON local.
+ * @param arquivo Arquivo File selecionado pelo usuário.
+ * @returns Objeto com resultado da importação.
+ */
+export const importarDadosDeArquivo = async (arquivo: File): Promise<{ sucesso: boolean; mensagem?: string; timestamp?: string; erro?: string }> => {
   try {
-    // Ler arquivo
     const texto = await arquivo.text();
     const dados = JSON.parse(texto);
-    
+
     // Validar dados
     const validacao = validarDadosImportados(dados);
     if (!validacao.valido) {
-      return { sucesso: false, erro: validacao.erro };
+      return { sucesso: false, erro: validacao.erro ?? 'Erro de validação desconhecido.' };
     }
-    
+
     // Aplicar dados aos stores
-    if (dados.dados.financas) {
-      const financas = dados.dados.financas;
-      useFinancasStore.setState(state => ({
-        ...state,
-        ...financas
-      }));
-    }
-    
-    if (dados.dados.alimentacao) {
-      const alimentacao = dados.dados.alimentacao;
-      useAlimentacaoStore.setState(state => ({
-        ...state,
-        ...alimentacao
-      }));
-    }
-    
-    if (dados.dados.autoconhecimento) {
-      const autoconhecimento = dados.dados.autoconhecimento;
-      useAutoconhecimentoStore.setState(state => ({
-        ...state,
-        ...autoconhecimento
-      }));
-    }
-    
-    if (dados.dados.hiperfocos) {
-      const hiperfocos = dados.dados.hiperfocos;
-      useHiperfocosStore.setState(state => ({
-        ...state,
-        ...hiperfocos
-      }));
-    }
-    
-    if (dados.dados.painelDia) {
-      const painelDia = dados.dados.painelDia;
-      usePainelDiaStore.setState(state => ({
-        ...state,
-        ...painelDia
-      }));
-    }
-    
-    if (dados.dados.perfil) {
-      const perfil = dados.dados.perfil;
-      usePerfilStore.setState(state => ({
-        ...state,
-        ...perfil
-      }));
-    }
-    
-    if (dados.dados.pomodoro) {
-      const pomodoro = dados.dados.pomodoro;
-      usePomodoroStore.setState(state => ({
-        ...state,
-        ...pomodoro
-      }));
-    }
-    
-    if (dados.dados.prioridades) {
-      const prioridades = dados.dados.prioridades;
-      usePrioridadesStore.setState(state => ({
-        ...state,
-        ...prioridades
-      }));
-    }
-    
-    if (dados.dados.registroEstudos) {
-      const registroEstudos = dados.dados.registroEstudos;
-      useRegistroEstudosStore.setState(state => ({
-        ...state,
-        ...registroEstudos
-      }));
-    }
-    
-    if (dados.dados.sono) {
-      const sono = dados.dados.sono;
-      useSonoStore.setState(state => ({
-        ...state,
-        ...sono
-      }));
-    }
-    
-    if (dados.dados.atividades) {
-      const atividades = dados.dados.atividades;
-      useAtividadesStore.setState(state => ({
-        ...state,
-        ...atividades
-      }));
-    }
-    
-    if (dados.dados.appGlobal) {
-      const appGlobal = dados.dados.appGlobal;
-      useAppStore.setState(state => ({
-        ...state,
-        ...appGlobal
-      }));
-    }
-    
-    return { 
-      sucesso: true, 
-      mensagem: 'Dados importados com sucesso',
-      timestamp: dados.timestamp
+    _applyImportedData(dados.dados);
+
+    return {
+      sucesso: true,
+      mensagem: 'Dados importados com sucesso do arquivo.',
+      timestamp: validacao.timestamp
     };
-  } catch (error: unknown) {
-    console.error('Erro ao importar dados:', error);
-    
-    let mensagemErro = 'Erro desconhecido';
-    if (error instanceof Error) {
-      mensagemErro = error.message;
-    }
-    
-    return { 
-      sucesso: false, 
-      erro: `Erro ao importar dados: ${mensagemErro}` 
+  } catch (error: any) {
+    console.error('Erro ao importar dados do arquivo:', error);
+    return {
+      sucesso: false,
+      erro: `Erro ao importar dados do arquivo: ${error.message}`
     };
   }
-}; 
+};
+
+/**
+ * Importa dados de um objeto JavaScript (ex: vindo de uma API).
+ * @param dataObject Objeto contendo a estrutura de dados exportada ({ versao, timestamp, dados }).
+ * @returns Objeto com resultado da importação.
+ */
+export const importarDadosFromObject = (dataObject: any): { sucesso: boolean; mensagem?: string; timestamp?: string; erro?: string } => {
+  try {
+    // Validar dados
+    const validacao = validarDadosImportados(dataObject);
+    if (!validacao.valido) {
+      return { sucesso: false, erro: validacao.erro ?? 'Erro de validação desconhecido.' };
+    }
+
+    // Aplicar dados aos stores
+    _applyImportedData(dataObject.dados);
+
+    return {
+      sucesso: true,
+      mensagem: 'Dados importados com sucesso.',
+      timestamp: validacao.timestamp
+    };
+  } catch (error: any) {
+    console.error('Erro ao importar dados do objeto:', error);
+    return {
+      sucesso: false,
+      erro: `Erro ao importar dados: ${error.message}`
+    };
+  }
+};

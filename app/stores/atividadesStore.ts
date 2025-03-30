@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { persist, createJSONStorage } from 'zustand/middleware'
 
 type Atividade = {
   id: string
@@ -38,8 +38,8 @@ export const useAtividadesStore = create<AtividadesState>()(
       })),
     }),
     {
-      name: 'atividades-lazer',
-      getStorage: () => localStorage
+      name: 'atividades-storage',
+      storage: createJSONStorage(() => localStorage)
     }
   )
 )

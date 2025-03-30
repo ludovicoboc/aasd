@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { persist, createJSONStorage } from 'zustand/middleware'
 
 type CicloPomodoro = 'foco' | 'pausa' | 'longapausa'
 
@@ -53,7 +53,7 @@ export const usePomodoroStore = create<PomodoroState>()(
     }),
     {
       name: 'pomodoro-storage',
-      getStorage: () => localStorage
+      storage: createJSONStorage(() => localStorage)
     }
   )
 )
