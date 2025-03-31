@@ -39,3 +39,5 @@ next-env.d.ts
 # credenciais e segredos
 client_secret*.json
 *googleusercontent*.json
+outputtwillo.txt
+outputtwillo2.txt
