@@ -4,7 +4,7 @@ import { cn } from '@/app/lib/utils'
 
 interface CardProps {
   children: React.ReactNode
-  title?: string
+  title?: React.ReactNode // Alterado de string para React.ReactNode
   className?: string
 }
 

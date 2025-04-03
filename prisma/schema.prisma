@@ -1,0 +1,432 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model AlternatingSession {
+  id                                                             String      @id
+  userId                                                         String
+  titulo                                                         String
+  currentHyperfocusId                                            String?
+  previousHyperfocusId                                           String?
+  startTime                                                      DateTime
+  estimatedDuration                                              Int
+  completed                                                      Boolean     @default(false)
+  createdAt                                                      DateTime    @default(now())
+  updatedAt                                                      DateTime
+  Hyperfocus_AlternatingSession_currentHyperfocusIdToHyperfocus  Hyperfocus? @relation("AlternatingSession_currentHyperfocusIdToHyperfocus", fields: [currentHyperfocusId], references: [id])
+  Hyperfocus_AlternatingSession_previousHyperfocusIdToHyperfocus Hyperfocus? @relation("AlternatingSession_previousHyperfocusIdToHyperfocus", fields: [previousHyperfocusId], references: [id])
+  User                                                           User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([currentHyperfocusId])
+  @@index([userId])
+}
+
+model BudgetEnvelope {
+  id             String   @id
+  userId         String
+  nome           String
+  cor            String   @default("#CCCCCC")
+  valorAlocado   Float
+  valorUtilizado Float    @default(0.0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime
+  User           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model DailyPriority {
+  id        String   @id
+  userId    String
+  texto     String
+  concluida Boolean  @default(false)
+  data      DateTime @db.Date
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, data])
+}
+
+model FinanceCategory {
+  id               String             @id
+  userId           String
+  nome             String
+  cor              String             @default("#CCCCCC")
+  icone            String             @default("tag")
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime
+  User             User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  RecurringPayment RecurringPayment[]
+  Transaction      Transaction[]
+
+  @@index([userId])
+}
+
+model HydrationLog {
+  id         String   @id
+  userId     String
+  data       DateTime
+  quantidade Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime
+  User       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, data])
+}
+
+model Hyperfocus {
+  id                                                                     String               @id
+  userId                                                                 String
+  titulo                                                                 String
+  descricao                                                              String?
+  cor                                                                    String               @default("#CCCCCC")
+  tempoLimite                                                            Int?
+  createdAt                                                              DateTime             @default(now())
+  updatedAt                                                              DateTime
+  AlternatingSession_AlternatingSession_currentHyperfocusIdToHyperfocus  AlternatingSession[] @relation("AlternatingSession_currentHyperfocusIdToHyperfocus")
+  AlternatingSession_AlternatingSession_previousHyperfocusIdToHyperfocus AlternatingSession[] @relation("AlternatingSession_previousHyperfocusIdToHyperfocus")
+  User                                                                   User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  HyperfocusTask                                                         HyperfocusTask[]
+
+  @@index([userId])
+}
+
+model HyperfocusTask {
+  id                   String           @id
+  hyperfocusId         String
+  parentId             String?
+  texto                String
+  concluida            Boolean          @default(false)
+  cor                  String?
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime
+  Hyperfocus           Hyperfocus       @relation(fields: [hyperfocusId], references: [id], onDelete: Cascade)
+  HyperfocusTask       HyperfocusTask?  @relation("HyperfocusTaskToHyperfocusTask", fields: [parentId], references: [id], onDelete: Cascade)
+  other_HyperfocusTask HyperfocusTask[] @relation("HyperfocusTaskToHyperfocusTask")
+
+  @@index([hyperfocusId])
+  @@index([parentId])
+}
+
+model LazerActivity {
+  id        String                @id
+  userId    String
+  nome      String
+  descricao String?
+  duracao   Int
+  categoria LazerActivityCategory
+  createdAt DateTime              @default(now())
+  updatedAt DateTime
+  User      User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model MealLog {
+  id        String   @id
+  userId    String
+  dataHora  DateTime
+  descricao String
+  tipoIcone String?
+  fotoUrl   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, dataHora])
+}
+
+model MealPlanTemplate {
+  id        String   @id
+  userId    String
+  horario   String
+  descricao String
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model MoodLog {
+  id        String     @id
+  userId    String
+  data      DateTime
+  humor     MoodOption
+  notas     String?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime
+  User      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, data])
+}
+
+model RecurringPayment {
+  id               String          @id
+  userId           String
+  categoryId       String
+  descricao        String
+  valor            Float
+  diaVencimento    Int
+  proximoPagamento DateTime?
+  pagoUltimoCiclo  Boolean         @default(false)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime
+  FinanceCategory  FinanceCategory @relation(fields: [categoryId], references: [id])
+  User             User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([categoryId])
+  @@index([userId])
+}
+
+model Reminder {
+  id              String           @id
+  userId          String
+  titulo          String
+  descricao       String?
+  dataHora        DateTime
+  recorrente      Boolean          @default(false)
+  diasRecorrencia DayOfWeek[]
+  categoria       ReminderCategory
+  completado      Boolean          @default(false)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime
+  User            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, completado, dataHora])
+}
+
+model SelfKnowledgeNote {
+  id        String      @id
+  userId    String
+  titulo    String
+  conteudo  String
+  secao     NoteSection
+  tags      String[]
+  imagemUrl String?
+  createdAt DateTime    @default(now())
+  updatedAt DateTime
+  User      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model SleepRecord {
+  id        String    @id
+  userId    String
+  inicio    DateTime
+  fim       DateTime?
+  qualidade Int?
+  notas     String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime
+  User      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, inicio])
+}
+
+model SleepReminder {
+  id         String            @id
+  userId     String
+  tipo       SleepReminderType
+  horario    String
+  diasSemana DayOfWeek[]
+  ativo      Boolean           @default(true)
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime
+  User       User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, ativo])
+}
+
+model StudyMaterial {
+  id        String            @id
+  userId    String
+  titulo    String
+  tipo      StudyMaterialType
+  url       String?
+  progresso Int               @default(0)
+  notas     String?
+  createdAt DateTime          @default(now())
+  updatedAt DateTime
+  User      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model StudySession {
+  id            String          @id
+  userId        String
+  inicio        DateTime
+  fim           DateTime?
+  materia       String
+  tecnica       StudyTechnique?
+  produtividade Int?
+  notas         String?
+  completo      Boolean         @default(false)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime
+  User          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, inicio])
+}
+
+model Transaction {
+  id              String          @id
+  userId          String
+  categoryId      String
+  data            DateTime
+  valor           Float
+  descricao       String
+  tipo            TransactionType
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime
+  FinanceCategory FinanceCategory @relation(fields: [categoryId], references: [id])
+  User            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([categoryId])
+  @@index([userId, data])
+}
+
+model User {
+  id                            String                @id
+  createdAt                     DateTime              @default(now())
+  updatedAt                     DateTime
+  nome                          String                @default("Usuário")
+  prefAltoContraste             Boolean               @default(false)
+  prefReducaoEstimulos          Boolean               @default(false)
+  prefTextoGrande               Boolean               @default(false)
+  metaHorasSono                 Float                 @default(8.0)
+  metaTarefasPrioritarias       Int                   @default(3)
+  metaCoposAgua                 Int                   @default(8)
+  metaPausasProgramadas         Int                   @default(4)
+  notificacoesAtivas            Boolean               @default(true)
+  pausasAtivas                  Boolean               @default(true)
+  modoRefugioAtivo              Boolean               @default(false)
+  pomodoroTempoFoco             Int                   @default(25)
+  pomodoroTempoPausa            Int                   @default(5)
+  pomodoroTempoLongaPausa       Int                   @default(15)
+  pomodoroCiclosAntesLongaPausa Int                   @default(4)
+  pomodoroCiclosCompletos       Int                   @default(0)
+  whatsappNumber                String?               @unique
+  AlternatingSession            AlternatingSession[]
+  BudgetEnvelope                BudgetEnvelope[]
+  DailyPriority                 DailyPriority[]
+  FinanceCategory               FinanceCategory[]
+  HydrationLog                  HydrationLog[]
+  Hyperfocus                    Hyperfocus[]
+  LazerActivity                 LazerActivity[]
+  MealLog                       MealLog[]
+  MealPlanTemplate              MealPlanTemplate[]
+  MoodLog                       MoodLog[]
+  RecurringPayment              RecurringPayment[]
+  Reminder                      Reminder[]
+  SelfKnowledgeNote             SelfKnowledgeNote[]
+  SleepRecord                   SleepRecord[]
+  SleepReminder                 SleepReminder[]
+  StudyMaterial                 StudyMaterial[]
+  StudySession                  StudySession[]
+  Transaction                   Transaction[]
+  WhatsappVerification          WhatsappVerification?
+}
+
+model WhatsappVerification {
+  id          String   @id
+  userId      String   @unique
+  phoneNumber String
+  code        String
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+  User        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([expiresAt])
+}
+
+enum DayOfWeek {
+  SEG
+  TER
+  QUA
+  QUI
+  SEX
+  SAB
+  DOM
+}
+
+enum LazerActivityCategory {
+  ATIVO
+  PASSIVO
+  CRIATIVO
+  SOCIAL
+}
+
+enum MoodOption {
+  OTIMO
+  BOM
+  NEUTRO
+  BAIXO
+  RUIM
+}
+
+enum NoteSection {
+  QUEM_SOU
+  MEUS_PORQUES
+  MEUS_PADROES
+}
+
+enum ReminderCategory {
+  INICIO
+  ALIMENTACAO
+  ESTUDOS
+  SAUDE
+  LAZER
+  NENHUMA
+}
+
+enum SleepReminderType {
+  DORMIR
+  ACORDAR
+}
+
+enum StudyMaterialType {
+  LIVRO
+  VIDEO
+  ARTIGO
+  EXERCICIO
+  OUTRO
+}
+
+enum StudyTechnique {
+  POMODORO
+  BLOCOS
+  LIVRE
+}
+
+enum TransactionType {
+  RECEITA
+  DESPESA
+}
+
+// Modelo para registrar erros da integração com Supabase
+model SupabaseErrorLog {
+  id              String    @id @default(cuid()) // Identificador único do log
+  createdAt       DateTime  @default(now())     // Timestamp da ocorrência do erro
+  service         String                       // Serviço Supabase afetado (Auth, Database, Storage, Functions)
+  errorMessage    String                       // Mensagem de erro principal
+  errorCode       String?                      // Código de erro específico do Supabase (opcional)
+  stackTrace      String?                      // Stack trace do erro (opcional, pode ser longo) @db.Text
+  requestContext  Json?                        // Contexto da requisição (endpoint, query, payload anonimizado) (opcional)
+  userId          String?                      // ID do usuário logado (opcional)
+  source          String                       // Origem do erro ('client' ou 'server')
+  status          String    @default("new")    // Status do log (new, investigating, resolved) - opcional para gestão
+
+  @@index([createdAt]) // Indexar por data para consultas eficientes
+  @@index([service])
+  @@index([status])
+  @@index([userId])
+}

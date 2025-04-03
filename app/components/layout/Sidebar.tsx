@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, Utensils, BookOpen, Heart, Smile, DollarSign, Rocket, X } from 'lucide-react'
+import { Home, Utensils, BookOpen, Heart, Smile, DollarSign, Rocket, Bug, X, Database } from 'lucide-react' // Adicionado Bug e Database
 
 type NavItem = {
   name: string
@@ -62,7 +62,21 @@ const navItems: NavItem[] = [
     icon: Rocket,
     color: 'text-hiperfocos-primary',
     activeColor: 'bg-hiperfocos-light',
+  }, // Adiciona a vírgula aqui
+  {
+    name: 'Debug',
+    href: '/debug',
+    icon: Bug, // Ícone para Debug
+    color: 'text-purple-500', // Cor para Debug (pode ajustar)
+    activeColor: 'bg-purple-100 dark:bg-purple-900', // Cor ativa para Debug (pode ajustar)
   },
+  { // Item para Debug Supabase
+    name: 'Debug Supabase',
+    href: '/debug/supabase', // Aponta para a nova página inicial
+    icon: Database, // Ícone de Banco de Dados
+    color: 'text-green-500', // Cor verde do Supabase
+    activeColor: 'bg-green-100 dark:bg-green-900', // Cor ativa verde
+  }
 ]
 
 type SidebarProps = {
